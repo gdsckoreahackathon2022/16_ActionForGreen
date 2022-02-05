@@ -31,7 +31,10 @@ npm run start
 > - 프로젝트의 최상위 경로에서 실행합니다.
 
 Back-end(Server, Firebase)
-
+필요한 구성 요소 설치 및 실행
+```sh
+npm i firebase
+```
 ## :smile:Author
 
 👤 **ActionForGreen Team GDSC Hackathon**
@@ -43,8 +46,10 @@ Back-end(Server, Firebase)
 > - 강보권: 서버, 백엔드 및 API 관리
 
 ## :wrench:사용 기술
+> - Tech Stack : React, Node.js, Firebase
 > - Front-end(FE): React
 > - Back-end(BE): Firebase
+
 
 ## ❤️ 향후 발전 계획
 사람들에게 탄소 배출 알림만으로 경각심 유발에 다소 한계가 있을 수 있으므로 인센티브를 지급하는 방안을 고려하고 있습니다. ActionForGreen은 현재 수익이 발생하지 않으므로 직접 인센티브 지급은 곤란하지만, 지자체, 정부, 환경부, 그리고 관련 기업과 연계하여 인센티브가 실질적 이용자에게 지급된다면 좋은 반응을 기대할 수 있습니다.
