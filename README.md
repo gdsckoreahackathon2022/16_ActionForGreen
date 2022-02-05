@@ -31,10 +31,15 @@ npm run start
 > - 프로젝트의 최상위 경로에서 실행합니다.
 
 Back-end(Server, Firebase)
-필요한 구성 요소 설치 및 실행
+필요한 구성 요소 설치
+
 ```sh
-npm i firebase
+npm i firebase-tools // 구성요소 설정
+firebase login // firebase 로그인
+firebase init // 구성 시작
+firebase deploy // 배포
 ```
+
 ## :smile:Author
 
 👤 **ActionForGreen Team GDSC Hackathon**
