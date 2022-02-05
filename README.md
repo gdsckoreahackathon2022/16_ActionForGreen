@@ -42,13 +42,19 @@ npm i // dependency 설치
 firebase deploy // 배포
 ```
 
+simulator(python)
+/src/data_generator/d_g_main.py 를 실행시켜, 가상으로 랜덤 값의 유저를 만들고, 20일치의 iot 데이터를
+랜덤 생성하여 서버에 보내준다. (* test.db에 있는 serial 들이, 이 프로그램 내에서 send_data()를 호출할 때 안에 있는 serial 마다
+서버에 데이터를 보내준다. 즉 d_g_main.py를 실행해 가상의 시리얼 들과 유저들을 만드려면, test.db를 리셋하고 다시하는 것이 좋다.)
+skip_1_day.py 를 실행해 발표용 시뮬레이션을 보여주었다.
+
 ## :smile:Author
 
 👤 **ActionForGreen Team GDSC Hackathon**
 > ActionForGreen은 네 명으로 구성된 팀으로 기후변화 대응을 위한 적극적인 Action!이 필요하다는 취지에서 ActionForGreen이라는 이름으로 정했습니다. 네 명이 모여서 코딩을 하던 중 구현이 생각보다 잘 되지 않거나 오류가 발생하는 부분이 많아 힘들었지만 끝까지 붙어서 무지성(?)으로 해결하기도 했답니다~!
 
 > - 이휘찬: 프론트엔드 및 디자인, 팀장 (대시보드 화면 및 백엔드 API 연동)
-> - 남도하: 데이터 프로세싱
+> - 남도하: 데이터 프로세싱, iot 시뮬레이터 생성
 > - 한강민: 프론트엔드 및 디자인 (로그인 및 회원가입 화면)
 > - 강보권: 서버, 백엔드 및 API 관리
 
