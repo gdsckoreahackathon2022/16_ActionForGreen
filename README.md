@@ -26,7 +26,7 @@
 
 Front-end(Client Program)
 ```sh
-yarn start
+npm run start
 ```
 > - 프로젝트의 최상위 경로에서 실행합니다.
 
