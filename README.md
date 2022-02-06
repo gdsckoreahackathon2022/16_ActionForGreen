@@ -46,6 +46,8 @@ npm run start
 Back-end(Server, Firebase)
 필요한 구성 요소 설치
 
+현재는 배포가 중단되었습니다.
+
 ```sh
 npm i firebase-tools // 구성요소 설정
 firebase login // firebase 로그인
@@ -75,7 +77,7 @@ skip_1_day.py 를 실행해 발표용 시뮬레이션을 보여주었다.
 
 > - Tech Stack : React, Node.js, Firebase
 > - Front-end(FE): React
-> - Back-end(BE): Firebase
+> - Back-end(BE): Firebase + Express.js
 
 ## ❤️ 향후 발전 계획
 
