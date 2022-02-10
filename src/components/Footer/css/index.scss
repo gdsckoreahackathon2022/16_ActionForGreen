@@ -1,0 +1,19 @@
+.footer {
+  display: flex;
+  margin-top: 30px;
+  border-top: 1px solid black;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  .text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    h1,
+    h2 {
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+  }
+}

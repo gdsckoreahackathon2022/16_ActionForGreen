@@ -1,47 +1,77 @@
-# main 실행 파일
-# 사용자에게서 입력값을 받아 자료구조를 만들고
-# 그것을 토대로 각 노드 별 소켓을 만들어서 할당해준다.
-import multiprocessing
-import os
-import iot_energy
+import string
+import requests
+import send_api
 import adjust_db
-import queue
-import sys
-import sqlite3
-import time
-import configparser
-import socket
+import random
 import json
-start_time = time.time()  # 프로그램을 실행한지 시간이 얼마나 지났는지 알려주기 위한 시작 시간
-num_of_child = []  # 각 노드의 자식 수
-child_node = []  # 각 노드의 자식 노드들의 index
-parent_node = []  # 각 노드의 부모 노드의 index
-is_leaf = []  # 각 노드가 말단 노드인지 확인해주는 배열. 0 혹은 1이 있다.
-sparse_matrix = []  # 노드 별 연결 관계를 나타내느 sparse matrix
-N, R = -1, 1  # 총 노드 개수, 루트 노드 번호.
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# 전기=1(kW), 도시가스=2(Nm^3), 자동차 거리=3(km),
+# 데이터=4(MB), 일회용품=5(g), 음식물=6(kg), 수도=7(l)
+dict1 = {1: [100, 200, 14], 2: [0, 5, 2200], 3: [0, 200, 100],
+         4: [0, 10000, 11], 5: [0, 100, 2.4], 6: [0, 3, 1650], 7: [100, 200, 3.3]}
+last_updated = 0
 
 
-def make_root_node(self_adr, data_min, data_max):
-    iot_energy.iot_energy(self_adr, data_min,data_max)
+def send_data(conn):
+    global last_updated
+    iot = adjust_db.select_all_tasks(conn)
+    print(iot)
+    for ind, i in enumerate(iot):
+        data = int(random.random() * (i[3] - i[2]) + i[2])
+        if ind < last_updated:
+            send_api.set_api_body(i[1], data, i[4], 0)
+        else:
+            send_api.set_api_body(i[1], data, i[4], 1)
+    last_updated = len(iot)
+
+
+def add_iot(kind, number, conn):
+    arg = (1000000 * kind + number, dict1[kind][0], dict1[kind][1], dict1[kind][2])
+    adjust_db.create_iot(conn, arg)
+
+
+def set_user_serial(email, data):
+    body = {"email": email, "serial": data}
+    url = "https://us-central1-hack-9d261.cloudfunctions.net/user/addUserNoToken"
+    headers = {'Content-Type': 'application/json', 'charset': 'UTF-8', 'Accept': '*/*'}
+    requests.post(url, headers=headers, data=json.dumps(body, ensure_ascii=False, indent="\t"))
 
 
 def main():
-    global num_of_child, N, R, sparse_matrix, child_node, parent_node, is_leaf
+    conn = adjust_db.create_connection(r"test.db")
+    sql_create_iot_table = """ CREATE TABLE IF NOT EXISTS iot (
+                                                id integer PRIMARY KEY,
+                                                serial integer NOT NULL,
+                                                min integer NOT NULL,
+                                                max integer NOT NULL,
+                                                transfer_con float NOT NULL
+                                            ); """
+    adjust_db.create_table(conn, sql_create_iot_table)
+    serial_numbers = {}
 
-    conn = sqlite3.connect(r"test.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    iot=adjust_db.select_all_tasks(conn)
-    print(iot)
-    iot_num=len(iot)
-    pool = multiprocessing.Pool(processes=iot_num)
-    for i in iot:
-        pool.apply_async(make_root_node, [i[0], i[2], i[3]])
+    for i in range(10):
+        num_registered_people=int(random.random()*3)
+        for k in range(num_registered_people):
+            email=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+            email+='@fake.com'
+            num_serial=int(random.random()*4)+1
+            serials=[]
+            for j in range(num_serial):
+                kind=int(random.random()*7)+1
+                temp_serial = int(random.random() * 1000000)
+                while temp_serial in serial_numbers:
+                    temp_serial = int(random.random() * 1000000)
+                serial_numbers[temp_serial] = 0
+                add_iot(kind, temp_serial, conn)
+                serials.append(kind*1000000+temp_serial)
+            set_user_serial(email,serials)
+        send_data(conn)
+    for i in range(10):
+        print("----------------",i,"------------------")
+        send_data(conn)
 
-    pool.close()
-    pool.join()
-    print("wow")
+    # add iot manually, and skip one day
+
 
 
 if __name__ == "__main__":
